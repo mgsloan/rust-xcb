@@ -1964,9 +1964,10 @@ def _cookie(request):
 
     _r.section(1)
     _r('')
-    _r("impl<'a> %s<'a> {", cookie)
+    _r("impl<'a> base::IsCookie for %s<'a> {", cookie)
     with _r.indent_block():
-        _r("pub fn get_reply(&self) -> Result<%s, base::GenericError> {", reply)
+        _r("type Reply = %s;", reply)
+        _r("fn get_reply(&self) -> Result<%s, base::GenericError> {", reply)
         with _r.indent_block():
             _r('unsafe {')
             with _r.indent_block():

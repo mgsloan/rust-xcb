@@ -192,7 +192,20 @@ pub struct Cookie<'a, T: Copy> {
     pub checked: bool
 }
 
+pub trait IsCookie {
+    // TODO: Why does this have to be disambiguated?
+    type Reply;
+    fn get_reply(&self) -> Result<Self::Reply, GenericError>;
+}
+
 pub type VoidCookie<'a> = Cookie<'a, xcb_void_cookie_t>;
+
+impl<'a> IsCookie for VoidCookie<'a> {
+    type Reply = ();
+    fn get_reply(&self) -> Result<(), GenericError> {
+        self.request_check()
+    }
+}
 
 impl<'a> VoidCookie<'a> {
     pub fn request_check(&self) -> Result<(), GenericError> {
